@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - README.md
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  debian:
+    name: Debian pkg
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - base_image: ubuntu
+            version: 24.04
+            codename: noble
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: depot/setup-action@v1
+      - uses: depot/build-push-action@v1
+        with:
+          file: Dockerfile
+          pull: true
+          outputs: pkgs
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: etcd-pkgs
+          path: pkgs
+      #- name: Upload deb packages to Packagecloud
+      #  run: find pkgs -name "*.deb" -exec curl -fsSu "${{ secrets.packagecloud_token }}:" -F "package[distro_version_id]=35" -F "package[package_file]=@{}" -XPOST https://packagecloud.io/api/v1/repos/84codes/etcd/packages.json \;
+      #  if: github.ref == 'refs/heads/main'
