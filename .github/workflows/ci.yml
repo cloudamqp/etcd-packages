@@ -25,10 +25,10 @@ jobs:
             codename: noble
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - uses: depot/setup-action@v1
-      - uses: depot/build-push-action@v1
+      #- name: Checkout
+      #  uses: actions/checkout@v4
+      - name: Make deb packages
+        uses: docker/build-push-action@v6
         with:
           file: Dockerfile
           pull: true
