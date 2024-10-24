@@ -45,7 +45,7 @@ jobs:
           curl -fsSO -u "${{ secrets.PACKAGECLOUD_TOKEN }}:" https://packagecloud.io/api/v1/distributions.json
           for PKG_FILE in $(find pkgs -name "*.deb")
           do
-            DIST_ID=$(jq ".deb[] | select(.index_name == \"ubuntu\").versions[] | select(.index_name == \"noble}\").id" distributions.json)
+            DIST_ID=$(jq ".deb[] | select(.index_name == \"ubuntu\").versions[] | select(.index_name == \"noble\").id" distributions.json)
             curl -fsS -u "${{ secrets.PACKAGECLOUD_TOKEN }}:" -XPOST \
               -F "package[distro_version_id]=${DIST_ID}" \
               -F "package[package_file]=@${PKG_FILE}" \
