@@ -14,19 +14,9 @@ permissions:
 
 jobs:
   debian:
-    name: Debian pkg
+    name: Deb packages
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - base_image: ubuntu
-            version: 24.04
-            codename: noble
-
     steps:
-      #- name: Checkout
-      #  uses: actions/checkout@v4
       - name: Make deb packages
         uses: docker/build-push-action@v6
         with:
@@ -39,7 +29,7 @@ jobs:
           name: etcd-pkgs
           path: pkgs
       - name: Upload deb packages to Packagecloud
-        #if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         run: |
           set -eux
           curl -fsSO -u "${{ secrets.PACKAGECLOUD_TOKEN }}:" https://packagecloud.io/api/v1/distributions.json
