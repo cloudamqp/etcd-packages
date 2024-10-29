@@ -19,12 +19,12 @@ RUN mkdir -p pkg/usr/bin
 RUN curl -L ${download_url}/${etcd_version}/etcd-${etcd_version}-${TARGETOS}-${arch}.tar.gz -o tmp/etcd-${etcd_version}-${TARGETOS}-${arch}.tar.gz
 RUN tar xzvf tmp/etcd-${etcd_version}-${TARGETOS}-${arch}.tar.gz -C tmp/etcd/ --strip-components=1
 RUN cp tmp/etcd/etcd* pkg/usr/bin/
-COPY etcd.service pkg/etc/systemd/system/
+COPY etcd.service pkg/etc/systemd/system/etcd.service
 # create deb package
 RUN fpm -s dir -t deb -n etcd -v ${etcd_version} --iteration ${pkg_revision} -a ${arch} \
   --url https://etcd.io --maintainer "84codes <contact@84codes.com>" \
   --description "A distributed, reliable key-value store" \
-  --deb-systemd etcd.service \
+  --deb-systemd pkg/etc/systemd/system/etcd.service \
   --license "Apache 2.0" --chdir pkg .
 
 # ARM64
@@ -35,12 +35,12 @@ RUN rm -rf pkg/usr/bin/*
 RUN curl -L ${download_url}/${etcd_version}/etcd-${etcd_version}-${TARGETOS}-${arch}.tar.gz -o tmp/etcd-${etcd_version}-${TARGETOS}-${arch}.tar.gz
 RUN tar xzvf tmp/etcd-${etcd_version}-${TARGETOS}-${arch}.tar.gz -C tmp/etcd/ --strip-components=1
 RUN cp tmp/etcd/etcd* pkg/usr/bin/
-COPY etcd.service pkg/etc/systemd/system/
+COPY etcd.service pkg/etc/systemd/system/etcd.service
 # create deb package
 RUN fpm -s dir -t deb -n etcd -v ${etcd_version} --iteration ${pkg_revision} -a ${arch} \
   --url https://etcd.io --maintainer "84codes <contact@84codes.com>" \
   --description "A distributed, reliable key-value store" \
-  --deb-systemd etcd.service \
+  --deb-systemd pkg/etc/systemd/system/etcd.service \
   --license "Apache 2.0" --chdir pkg .
 
 # put .deb files in a scratch image for exporting
