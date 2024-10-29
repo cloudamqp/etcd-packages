@@ -37,5 +37,5 @@ jobs:
             curl -fsS -u "${{ secrets.PACKAGECLOUD_TOKEN }}:" -XPOST \
               -F "package[distro_version_id]=35" \
               -F "package[package_file]=@${PKG_FILE}" \
-              https://packagecloud.io/api/v1/repos/84codes/etcd/packages.json
+              https://packagecloud.io/api/v1/repos/cloudamqp/etcd/packages.json
            done
