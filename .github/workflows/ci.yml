@@ -32,12 +32,10 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           set -eux
-          curl -fsSO -u "${{ secrets.PACKAGECLOUD_TOKEN }}:" https://packagecloud.io/api/v1/distributions.json
           for PKG_FILE in $(find pkgs -name "*.deb")
           do
-            DIST_ID=$(jq ".deb[] | select(.index_name == \"ubuntu\").versions[] | select(.index_name == \"noble\").id" distributions.json)
             curl -fsS -u "${{ secrets.PACKAGECLOUD_TOKEN }}:" -XPOST \
-              -F "package[distro_version_id]=${DIST_ID}" \
+              -F "package[distro_version_id]=35" \
               -F "package[package_file]=@${PKG_FILE}" \
               https://packagecloud.io/api/v1/repos/84codes/etcd/packages.json
            done
